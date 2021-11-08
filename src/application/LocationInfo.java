@@ -9,6 +9,9 @@ public class LocationInfo {
 		this.LocNum=locNum;
 		this.City=city;
 	}
+	public int getLocNum() {
+		return LocNum;
+	}
 	public String getCity() {
 		return City;
 	}
