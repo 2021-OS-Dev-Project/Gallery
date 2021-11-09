@@ -1,0 +1,21 @@
+.root {
+    -fx-background-color: #D6D5F4;
+}
+
+#Navigation {
+    -fx-background-color: white;
+    -fx-border-color: #D0D0D0;
+    -fx-border-width: 1.2px;
+}
+
+#Login {
+    -fx-background-color: white;
+}
+
+#SelectSignMenu {
+    -fx-background-color: rgba(231, 194, 255, 0.56);
+}
+
+#SelectSignMenu:pressed {
+    -fx-border-color: white;
+}
