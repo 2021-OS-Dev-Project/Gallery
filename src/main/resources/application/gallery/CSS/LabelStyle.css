@@ -1,0 +1,29 @@
+#TitleLabel {
+    -fx-font-family: 'MapoFlowerIsland';
+    -fx-font-size: 50;
+    -fx-text-alignment: left;
+}
+
+#BodyLabel {
+    -fx-font-family: 'MapoGoldenPier';
+    -fx-font-size: 18;
+    -fx-text-alignment: left;
+}
+
+#SignUpLabel {
+    -fx-font-family: 'MapoBackpacking';
+    -fx-font-size: 38;
+    -fx-text-fill: #806796;
+}
+
+#MenuName {
+    -fx-font-family: 'MapoFlowerIsland';
+    -fx-font-size: 32;
+    -fx-text-fill: rgb(148, 68, 176);
+}
+
+#PolicyLabel {
+    -fx-text-fill: #2699FB;
+    -fx-font-family: 'Arial';
+    -fx-font-size: 12;
+}
