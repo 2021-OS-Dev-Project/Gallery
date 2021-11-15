@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="Each" fillWidth="false" prefHeight="430.0" prefWidth="361.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.EachGalleryController">
+   <children>
+      <ImageView fx:id="GalleryImg" fitHeight="287.0" fitWidth="362.0" pickOnBounds="true" smooth="false" />
+      <Label fx:id="GalleryName" style="-fx-font-family: MapoPeacefull; -fx-font-size: 17;" textFill="#6800a4">
+         <VBox.margin>
+            <Insets left="15.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <Label fx:id="Explanation" alignment="TOP_LEFT" lineSpacing="3.0" prefHeight="85.0" prefWidth="335.0" style="-fx-font-family: MapoPeacefull;" wrapText="true">
+         <VBox.margin>
+            <Insets left="15.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+   </children>
+   <effect>
+      <DropShadow color="#00000066" offsetX="5.0" offsetY="5.0" />
+   </effect>
+</VBox>

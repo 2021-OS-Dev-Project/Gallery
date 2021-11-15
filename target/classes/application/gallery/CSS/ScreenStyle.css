@@ -1,4 +1,8 @@
 .root {
+    -fx-background-color: white;
+}
+
+#Main{
     -fx-background-color: #D6D5F4;
 }
 
@@ -8,14 +12,19 @@
     -fx-border-width: 1.2px;
 }
 
-#Login {
-    -fx-background-color: white;
-}
-
 #SelectSignMenu {
     -fx-background-color: rgba(231, 194, 255, 0.56);
 }
 
 #SelectSignMenu:pressed {
+    -fx-border-color: white;
+}
+
+#Each{
+    -fx-border-color: rgba(128, 128, 128, 0.22);
+    -fx-background-color: white;
+}
+
+#List{
     -fx-border-color: white;
 }

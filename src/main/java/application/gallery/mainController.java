@@ -27,7 +27,7 @@ public class mainController {
 
     public void Move2SignUp(ActionEvent event){
         try {
-            Parent login =FXMLLoader.load(getClass().getResource("SignUpScene.fxml"));
+            Parent login =FXMLLoader.load(getClass().getResource("GalleryList.fxml"));
             Scene scene = new Scene(login);
             Stage primaryStage =(Stage) StartButton.getScene().getWindow();
             primaryStage.setScene(scene);
