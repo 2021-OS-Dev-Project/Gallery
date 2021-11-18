@@ -1,0 +1,86 @@
+#StartButton {
+    -fx-font-family: 'Roboto-Medium';
+    -fx-font-size: 12;
+
+    -fx-background-color: #6200EE 0% 0% no-repeat padding-box;
+    -fx-border-radius: 4px;
+    -fx-opacity: 1;
+
+    -fx-text-align: left;
+    -fx-text-fill: white;
+}
+
+#StartButton:pressed {
+    -fx-background-color: #D6D5F4;
+}
+
+#LogInButton {
+    -fx-font-family: 'Arial';
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+
+    -fx-background-color: #2699FB 0% 0% no-repeat padding-box;
+    -fx-border-radius: 4px;
+    -fx-opacity: 1;
+
+    -fx-text-align: center;
+    -fx-text-fill: white;
+}
+
+#LogInButton:pressed {
+    -fx-background-color: white;
+    -fx-border-color: #2699FB;
+
+    -fx-text-fill: #2699FB;
+}
+
+#SignUpBotton {
+    -fx-font-family: 'Arial';
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+
+    -fx-background-color: #2699FB 0% 0% no-repeat padding-box;
+    -fx-border-radius: 4px;
+    -fx-opacity: 1;
+
+    -fx-text-align: center;
+    -fx-text-fill: white;
+}
+
+#SignUpBotton:pressed {
+    -fx-background-color: white;
+    -fx-border-color: #2699FB;
+
+    -fx-text-fill: #2699FB;
+}
+
+#MenuHome {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+}
+
+#MenuSign {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+    -fx-text-fill: #6200EE;
+}
+
+#MenuExhibition {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+
+}
+
+#MenuBoard {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+
+}

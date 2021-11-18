@@ -1,5 +1,6 @@
 package application;
 
+
 public class ArtInfo {
 	private int ArtNum;
 	private String ArtName;
@@ -8,7 +9,6 @@ public class ArtInfo {
 	private String EndPeriod;
 	private String Time;
 	private String Price;
-	private String ImageSRC;
 	private String Explanation;
 	private int ExhibitionNum;
 
@@ -23,16 +23,23 @@ public class ArtInfo {
 		this.ExhibitionNum=exhibitionNum;
 	}
 	
-	String PrintArt() {
-		
+	StringBuilder PrintArt() {
+		StringBuilder msg=new StringBuilder();
 		for(ExhibitionInfo tmp:Object.exhibition)
-			if(tmp.getNum()==ExhibitionNum)
-				return "작품 : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price+" "+ tmp.PrintExh();
-		return "작품 : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price;
+			if(tmp.getNum()==ExhibitionNum) {
+				if(Artist==null) Artist="...";
+				msg.append("작가 : "+Artist+"\n기간 : "+StartPeriod+" ~ "+EndPeriod+"\n시간 : "+ Time+"\n가격 : "+Price+" "+ tmp.PrintExh());;
+				return msg;
+			} 
+		return msg.append("작품 : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price);
 	}
 
 	int getArtNum() {
 		return ArtNum;
+	}
+	
+	String getArtName() {
+		return ArtName;
 	}
 	void setArtName(String Art) {
 		this.ArtName=ArtName;
@@ -64,5 +71,6 @@ public class ArtInfo {
 	public void setPrice(String price) {
 		Price = price;
 	}
+	
 }
 

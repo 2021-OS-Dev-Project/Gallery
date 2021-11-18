@@ -8,23 +8,43 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-public class DBLoader {
+
+public class DBLoader implements Runnable{
    static Connection conn=null;
+   static int count=0;
    String host="127.0.0.1",database="exhibitionmap?";
    int port=3306;
-   
+   int DBcount;
+   int Initcount;
+   private Stage stage2;
+   private FXMLLoader fxmlLoader;
+   private Parent root2;
    public DBLoader() {
-	   
+	  DBcount=0;
       try {
          Class.forName("com.mysql.cj.jdbc.Driver");
          conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+database+"serverTimezone=UTC","root","hdoo517a*");
-         
+      
+         fxmlLoader = new FXMLLoader(getClass().getResource("Second_Window.fxml"));
+         root2 = (Parent) fxmlLoader.load();
+         stage2 = new Stage();
+         stage2.initStyle(StageStyle.DECORATED);
+         stage2.setTitle("Second Window");
+         stage2.setScene(new Scene(root2));
+         Initcount=ArtNum();
       }catch(SQLException e) {
          e.printStackTrace();
       }catch(Exception e) {
          e.printStackTrace();
       }
+      
    }
    
    public static void SignUpuser(String id,String email,String passwd) {
@@ -76,13 +96,60 @@ public class DBLoader {
 	   return false;
    }
    
+   public int ArtNum() {
+	   try {
+		   Statement stmt=conn.createStatement();
+		   String sql;
+		   sql="select count(*) from Art";
+		   ResultSet rs=stmt.executeQuery(sql);
+		   while(rs.next()) {
+			   DBcount=rs.getInt(1);   
+		   }
+		   
+		   
+	   }catch(SQLException e) {
+		   System.out.println("[Select Äõ¸® ¿À·ù]\n"+e.getStackTrace());   
+	   }
+	   
+	   return DBcount;
+   }
+   
+   @Override
+   public void run() {
+	   LoadLocation();
+	   LoadExhibition();
+	   LoadArt();
+	   while(true) {
+		   DBcount=ArtNum();
+		   if(DBcount!=Initcount) {
+			   Object.art.clear();
+			   Object.exhibition.clear();
+			   Object.location.clear();
+			   LoadLocation();
+			   LoadExhibition();
+			   LoadArt();
+			   secondWindow();
+			   Initcount=DBcount;
+		   }
+	   }
+   }
+   
+  public void secondWindow(){
+       Platform.runLater(new Runnable() {
+           @Override
+           public void run() {
+               stage2.show();
+               for(int i=0;i<Object.art.size();i++)
+            	 Object.art.get(i).PrintArt(); 
+           }
+       });
+   }
    public void LoadArt() {
 	   try {
 		   Statement stmt=conn.createStatement();
 		   String sql;
 		   sql="select *from Art";
 		   ResultSet rs=stmt.executeQuery(sql);
-		   
 		   while(rs.next()) {
 			   String ArtNum=rs.getString("artnum");
 			   String ArtName=rs.getString("artName");
