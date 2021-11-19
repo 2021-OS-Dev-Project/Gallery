@@ -1,28 +1,47 @@
 package application;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-
 public class Main extends Application {
-    public Main() {
-    }
+    @Override
+    public void start(final Stage stage) {
+        stage.setWidth(400);
+        stage.setHeight(500);
+        Scene scene = new Scene(new Group());
 
-    public void start(Stage primaryStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(this.getClass().getResource("login.fxml"));
-            AnchorPane loginLayoutAnchorPane = (AnchorPane)loader.load();
-            Scene scene = new Scene(loginLayoutAnchorPane);
-            //scene.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception var5) {
-            var5.printStackTrace();
-        }
 
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(browser);
+
+        webEngine.getLoadWorker().stateProperty()
+                .addListener(new ChangeListener<State>() {
+                    @Override
+                    public void changed(ObservableValue ov, State oldState, State newState) {
+
+                        if (newState == Worker.State.SUCCEEDED) {
+                            stage.setTitle(webEngine.getLocation());
+                        }
+
+                    }
+                });
+        webEngine.load("http://localhost:8080/map.html");
+
+        scene.setRoot(scrollPane);
+
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {
