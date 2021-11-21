@@ -1,7 +1,16 @@
 package application.gallery;
 
-import application.model.Exhibitions;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Window;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import application.model.Exhibitions;
+
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,7 +18,7 @@ import javafx.scene.image.ImageView;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+
 
 public class EachGalleryController {
     @FXML
@@ -20,6 +29,8 @@ public class EachGalleryController {
 
     @FXML
     private Label Explanation;
+
+
 
     public void setData(Exhibitions exhibitions){
         try {

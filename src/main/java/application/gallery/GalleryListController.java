@@ -1,6 +1,7 @@
 package application.gallery;
 
 import application.model.Exhibitions;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 
 import com.jfoenix.controls.JFXDrawer;
 
@@ -40,6 +43,11 @@ public class GalleryListController implements Initializable {
     private String location;
 
     List<Exhibitions> exhibitionsList;
+
+    @FXML
+    private VBox POP;
+
+    private Popup popup;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,8 +93,34 @@ public class GalleryListController implements Initializable {
         } catch (IOException e){
             e.printStackTrace();
         }
+
+        popup = new Popup();
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("PopUp.fxml"));
+
+            POP = fxmlLoader.load();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void handlePopup(MouseEvent event){
+        if(popup.isShowing()){
+            popup.hide();
+        }else {
+            final Window window = galleryList.getScene().getWindow();
+            popup.setWidth(100);
+            popup.setHeight(300);
+            final double x = window.getX() + galleryList.localToScene(0, 0).getX() + galleryList.getScene().getX() ;
+            final double y = window.getY() + galleryList.localToScene(0, 0).getY() + galleryList.getScene().getY() + galleryList.getHeight();
+            popup.getContent().clear();
+            popup.getContent().addAll(POP);
+            popup.show(window, 989.2, 644);
+        }
+    }
 
     class ExcelIO {
 
