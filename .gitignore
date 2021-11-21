@@ -134,5 +134,6 @@ fabric.properties
 hs_err_pid*
 
 Gallery.iml
+pom.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
