@@ -1,14 +1,7 @@
 package application.gallery;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Window;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import application.model.Exhibitions;
 
 import javafx.scene.control.Label;
@@ -19,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javafx.scene.input.MouseEvent;
 
 public class EachGalleryController {
     @FXML
@@ -30,9 +24,17 @@ public class EachGalleryController {
     @FXML
     private Label Explanation;
 
+    private MyListener myListener;
+    private Exhibitions exhibitions;
 
+    private void click(MouseEvent mouseEvent, Exhibitions exhibitions){
+        MyListener.onClickListener(exhibitions);
+    }
 
-    public void setData(Exhibitions exhibitions){
+    public void setData(Exhibitions exhibitions, MyListener myListener){
+        this.myListener = myListener;
+        this.exhibitions = exhibitions;
+
         try {
             FileInputStream fis=new FileInputStream(exhibitions.getCover());
             BufferedInputStream bis=new BufferedInputStream(fis); //스트림준비

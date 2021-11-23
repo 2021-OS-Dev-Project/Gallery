@@ -21,7 +21,6 @@ public class PopUpController implements Initializable {
     private VBox POP;
 
     private Popup popup;
-．
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

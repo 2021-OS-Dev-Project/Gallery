@@ -1,9 +1,12 @@
 package application.model;
 
+import application.gallery.MyListener;
+
 public class Exhibitions {
     private String cover;
     private String name;
     private String explanation;
+    private MyListener myListener;
 
     public String getCover() {
         return cover;

@@ -2,16 +2,26 @@ package application.gallery;
 
 import application.model.Exhibitions;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+<<<<<<< HEAD
 import javafx.scene.control.Button;
+=======
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+>>>>>>> 934710c (전시회 선택 화면 초기 설정)
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import com.jfoenix.controls.JFXDrawer;
@@ -47,7 +57,14 @@ public class GalleryListController implements Initializable {
     @FXML
     private VBox POP;
 
-    private Popup popup;
+    @FXML
+    private StackPane sp;
+
+    private StackPane newLoadedPane;
+    private StackPane newLoadedPane2;
+
+    private MyListener myListener;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,40 +102,48 @@ public class GalleryListController implements Initializable {
 
                 VBox vBox = fxmlLoader.load();
                 EachGalleryController eachGalleryController = fxmlLoader.getController();
+<<<<<<< HEAD
                 eachGalleryController.setData(exhibitions);
                 if(galleryList != null)
                     galleryList.getChildren().add(vBox);
+=======
+                eachGalleryController.setData(exhibitions, );
+
+                galleryList.getChildren().add(vBox);
+>>>>>>> 934710c (전시회 선택 화면 초기 설정)
 
             }
+
+            galleryList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if(event.getClickCount()>=1) {
+                        try {
+                            Parent login = FXMLLoader.load(getClass().getResource("Select.fxml"));
+                            Scene scene = new Scene(login);
+                            Stage primaryStage =(Stage) ((Node)event.getSource()).getScene().getWindow();
+                            primaryStage.setScene(scene);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
         } catch (IOException e){
             e.printStackTrace();
         }
 
-        popup = new Popup();
-
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("PopUp.fxml"));
-
-            POP = fxmlLoader.load();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void handlePopup(MouseEvent event){
-        if(popup.isShowing()){
-            popup.hide();
-        }else {
-            final Window window = galleryList.getScene().getWindow();
-            popup.setWidth(100);
-            popup.setHeight(300);
-            final double x = window.getX() + galleryList.localToScene(0, 0).getX() + galleryList.getScene().getX() ;
-            final double y = window.getY() + galleryList.localToScene(0, 0).getY() + galleryList.getScene().getY() + galleryList.getHeight();
-            popup.getContent().clear();
-            popup.getContent().addAll(POP);
-            popup.show(window, 989.2, 644);
+    public void Move2Select(Exhibitions exhibitions) {
+        String name = exhibitions.getName();
+        try {
+            Parent login =FXMLLoader.load(getClass().getResource("Select.fxml"));
+            Scene scene = new Scene(login);
+            Stage primaryStage =(Stage) galleryList.getScene().getWindow();
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -203,6 +228,10 @@ public class GalleryListController implements Initializable {
                 exhibitions.setName(tmp.getArtName());
                 System.out.println(tmp.PrintArt());
                 ls.add(exhibitions);
+
+                myListener = new MyListener(){
+                    Move2Select(exhibitions);
+                };
             }
             return ls;
 
