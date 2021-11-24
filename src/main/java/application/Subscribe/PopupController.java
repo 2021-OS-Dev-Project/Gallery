@@ -49,7 +49,7 @@ public class PopupController implements Initializable {
             }
             else {
                 MuseumOnOff[1] = false;
-                System.out.println("국립현대미술관 선택 해제되었습니다.");
+                System.out.println("서울시립미술관 선택 해제되었습니다.");
             }
         });
 
@@ -60,7 +60,7 @@ public class PopupController implements Initializable {
             }
             else {
                 MuseumOnOff[2] = false;
-                System.out.println("국립현대미술관 선택 해제되었습니다.");
+                System.out.println("경남도립미술관 선택 해제되었습니다.");
             }
         });
     }

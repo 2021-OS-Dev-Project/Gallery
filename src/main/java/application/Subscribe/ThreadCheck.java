@@ -19,10 +19,12 @@ class ThreadCheck implements Runnable {
     private ArrayList<ArtInfo> list;
     private boolean update;
     private int gap;
+    boolean[] OnOff;
     private FXMLLoader fxmlLoader;
     private Parent root2;
     private Stage stage2;
     private ArrayList<ArtInfo> art;
+    private PopupController firstWindow;
 
     public ThreadCheck() throws IOException {  // 생성자
         ExcelIO ex = new ExcelIO();
@@ -33,6 +35,8 @@ class ThreadCheck implements Runnable {
         cells = 6;
         update = false;
         gap=0;
+
+        firstWindow = new PopupController();
     }
 
     private void read() throws IOException, InterruptedException {
@@ -47,7 +51,44 @@ class ThreadCheck implements Runnable {
             for(int i=oldRows; i<rows; i++){
                 list.add(art.get(i));
             }
-            update=true;
+
+            OnOff = firstWindow.getWhichMuseum();
+            int num=gap;
+            if(OnOff[0] || OnOff[1] || OnOff[2]) {
+                for (int i = 0; i < num; i++) {
+                    switch (list.get(i).getMuseumName()) {
+                        case "국립현대미술관":
+                            if (OnOff[0]) {
+                                update = true;
+                            } else {
+                                list.remove(i);
+                                i -= 1;
+                                num -= 1;
+                            }
+                            break;
+                        case "서울시립미술관":
+                            if (OnOff[1]) {
+                                update = true;
+                            } else {
+                                list.remove(i);
+                                i -= 1;
+                                num -= 1;
+                            }
+                            break;
+                        case "경남도립미술관":
+                            if (OnOff[2]) {
+                                update = true;
+                            } else {
+                                list.remove(i);
+                                i -= 1;
+                                num -= 1;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             oldRows=rows;
         }
         else{
