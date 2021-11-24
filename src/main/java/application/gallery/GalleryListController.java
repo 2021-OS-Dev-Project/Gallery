@@ -4,11 +4,14 @@ import application.model.Exhibitions;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import com.jfoenix.controls.JFXDrawer;
 
 import java.io.*;
 import java.net.URL;
@@ -25,17 +28,48 @@ public class GalleryListController implements Initializable {
     @FXML
     private Label MenuName;
 
+    @FXML
+    private JFXDrawer bar;
+
+    @FXML
+    private Button barbutton;
+
+    @FXML
+    private VBox content;
+
     private String location;
 
     List<Exhibitions> exhibitionsList;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        if(barbutton!=null)
+            barbutton.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+                if(bar.isOpened()){
+                    bar.close();
+                }
+
+                else{
+                    try {
+                        VBox Box = FXMLLoader.load(getClass().getResource("NavigationBar.fxml"));
+                        bar.setSidePane(Box);
+                        bar.open();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+            });
+
+
+
         ExcelIO ex = new ExcelIO();
         ex.fileRead();
         exhibitionsList = new ArrayList<>(ex.getGalleryList());
         location = "서울특별시";
-        LocationSet.setText("'"+ location + "'" + " ");
+        if(LocationSet != null)
+            LocationSet.setText("'"+ location + "'" + " ");
         try{
             for (Exhibitions exhibitions : exhibitionsList) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -44,8 +78,8 @@ public class GalleryListController implements Initializable {
                 VBox vBox = fxmlLoader.load();
                 EachGalleryController eachGalleryController = fxmlLoader.getController();
                 eachGalleryController.setData(exhibitions);
-
-                galleryList.getChildren().add(vBox);
+                if(galleryList != null)
+                    galleryList.getChildren().add(vBox);
 
             }
         } catch (IOException e){

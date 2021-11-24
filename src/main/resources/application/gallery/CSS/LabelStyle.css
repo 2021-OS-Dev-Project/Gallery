@@ -28,3 +28,24 @@
     -fx-font-size: 12;
 }
 
+
+#MenuHome {
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+}
+
+#MenuSign {
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+}
+
+#MenuExhibition {
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+
+}
+
+#MenuBoard {
+    -fx-font-family: 'MapoPeacefull';
+    -fx-font-size: 18px;
+}
