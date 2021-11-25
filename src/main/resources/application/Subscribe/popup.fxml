@@ -8,13 +8,17 @@
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="application.Subscribe.PopupController">
    <children>
-      <Label layoutX="230.0" layoutY="150.0" prefHeight="118.0" prefWidth="414.0" text="구독 버튼 활성화">
+      <Label layoutX="209.0" layoutY="87.0" prefHeight="118.0" prefWidth="414.0" text="구독 버튼 활성화">
          <font>
             <Font size="42.0" />
          </font>
       </Label>
-      <CheckBox fx:id="museum1" layoutX="330.0" layoutY="292.0" mnemonicParsing="false" text="국립현대미술관" />
-      <CheckBox fx:id="museum2" layoutX="330.0" layoutY="331.0" mnemonicParsing="false" text="서울시립미술관" />
-      <CheckBox fx:id="museum3" layoutX="330.0" layoutY="378.0" mnemonicParsing="false" text="경남도립미술관" />
+      <CheckBox fx:id="museum1" layoutX="311.0" layoutY="222.0" mnemonicParsing="false" text="63스카이아트" />
+      <CheckBox fx:id="museum2" layoutX="311.0" layoutY="266.0" mnemonicParsing="false" text="가나아트센터" />
+      <CheckBox fx:id="museum3" layoutX="311.0" layoutY="311.0" mnemonicParsing="false" text="국립현대미술관" />
+      <CheckBox fx:id="museum4" layoutX="311.0" layoutY="356.0" mnemonicParsing="false" text="삼성미술관 리움" />
+      <CheckBox fx:id="museum5" layoutX="311.0" layoutY="402.0" mnemonicParsing="false" text="서울시립미술관" />
+      <CheckBox fx:id="museum6" layoutX="311.0" layoutY="450.0" mnemonicParsing="false" text="세종갤러리" />
+      <CheckBox fx:id="museum7" layoutX="312.0" layoutY="498.0" mnemonicParsing="false" text="이목화랑" />
    </children>
 </AnchorPane>

@@ -17,7 +17,7 @@ public class Main extends Application {
         stage.setTitle("first Window");
         stage.show();
 
-        // Thread 돌리면서 엑셀 체크
+        // Thread 돌리면서 텍스트 파일 체크
         Thread thread = new Thread(new ThreadCheck());
         thread.setDaemon(true);  // 데몬 Thread로 설정(main Thread가 종료되면 자동으로 종료)
         thread.start();  // Thread 가동

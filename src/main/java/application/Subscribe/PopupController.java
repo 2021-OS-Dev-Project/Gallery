@@ -14,10 +14,18 @@ public class PopupController implements Initializable {
     @FXML
     private CheckBox museum3;
     @FXML
+    private CheckBox museum4;
+    @FXML
+    private CheckBox museum5;
+    @FXML
+    private CheckBox museum6;
+    @FXML
+    private CheckBox museum7;
+    @FXML
     static private boolean MuseumOnOff[];
 
     public PopupController(){
-        MuseumOnOff = new boolean[3];
+        MuseumOnOff = new boolean[7];
     }
 
     public boolean[] getWhichMuseum(){
@@ -29,33 +37,63 @@ public class PopupController implements Initializable {
         museum1.setOnAction((ActionEvent) -> {
             if(museum1.isSelected()) {
                 MuseumOnOff[0] = true;
-                System.out.println("국립현대미술관 선택되었습니다.");
             }
             else {
                 MuseumOnOff[0] = false;
-                System.out.println("국립현대미술관 선택 해제되었습니다.");
             }
         });
 
         museum2.setOnAction((ActionEvent) -> {
             if(museum2.isSelected()) {
                 MuseumOnOff[1] = true;
-                System.out.println("서울시립미술관 선택되었습니다.");
             }
             else {
                 MuseumOnOff[1] = false;
-                System.out.println("서울시립미술관 선택 해제되었습니다.");
             }
         });
 
         museum3.setOnAction((ActionEvent) -> {
             if(museum3.isSelected()) {
                 MuseumOnOff[2] = true;
-                System.out.println("경남도립미술관 선택되었습니다.");
             }
             else {
                 MuseumOnOff[2] = false;
-                System.out.println("경남도립미술관 선택 해제되었습니다.");
+            }
+        });
+
+        museum4.setOnAction((ActionEvent) -> {
+            if(museum4.isSelected()) {
+                MuseumOnOff[3] = true;
+            }
+            else {
+                MuseumOnOff[3] = false;
+            }
+        });
+
+        museum5.setOnAction((ActionEvent) -> {
+            if(museum5.isSelected()) {
+                MuseumOnOff[4] = true;
+            }
+            else {
+                MuseumOnOff[4] = false;
+            }
+        });
+
+        museum6.setOnAction((ActionEvent) -> {
+            if(museum6.isSelected()) {
+                MuseumOnOff[5] = true;
+            }
+            else {
+                MuseumOnOff[5] = false;
+            }
+        });
+
+        museum7.setOnAction((ActionEvent) -> {
+            if(museum7.isSelected()) {
+                MuseumOnOff[6] = true;
+            }
+            else {
+                MuseumOnOff[6] = false;
             }
         });
     }
