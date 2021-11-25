@@ -15,7 +15,6 @@ public class PopupController implements Initializable {
     private CheckBox museum3;
     @FXML
     static private boolean MuseumOnOff[];
-    private String message = "None";
 
     public PopupController(){
         MuseumOnOff = new boolean[3];
@@ -23,10 +22,6 @@ public class PopupController implements Initializable {
 
     public boolean[] getWhichMuseum(){
         return MuseumOnOff;
-    }
-
-    public void setMessage(String message){
-        this.message = message;
     }
 
     @Override
