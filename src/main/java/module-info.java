@@ -5,6 +5,7 @@ module application{
 
     requires TrayTester;
     requires commons.collections4;
+    requires com.jfoenix;
 
     opens application.gallery to javafx.fxml;
     exports application.gallery;

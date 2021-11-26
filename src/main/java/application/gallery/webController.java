@@ -14,6 +14,7 @@ import javafx.scene.web.WebView;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -37,13 +38,14 @@ public class webController implements Initializable {
     private Label setLo;
 
     @FXML
-    private WebView map;
+    private WebView browser;
 
     @FXML
     private JFXDrawer bar;
 
     WebEngine webEngine;
 
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         if (barbutton != null)
@@ -52,7 +54,7 @@ public class webController implements Initializable {
                     bar.close();
                 } else {
                     try {
-                        VBox Box = FXMLLoader.load(getClass().getResource("NavigationBar.fxml"));
+                        VBox Box = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("NavigationBar.fxml")));
                         bar.setSidePane(Box);
                         bar.open();
                     } catch (IOException ex) {
@@ -62,8 +64,8 @@ public class webController implements Initializable {
 
             });
 
-        if (map != null) {
-            webEngine = map.getEngine();
+        if (browser != null) {
+            webEngine = browser.getEngine();
             webEngine.getLoadWorker().stateProperty()
                     .addListener(new ChangeListener<State>() {
                         @Override
@@ -76,6 +78,6 @@ public class webController implements Initializable {
                         }
                     });
             webEngine.load("http://localhost:8080/gallery.html");
-        }
+        } else System.out.println("..!");
     }
 }
