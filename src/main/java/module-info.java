@@ -3,10 +3,8 @@ module application{
     requires javafx.fxml;
     requires javafx.web;
 
-//    requires com.jfoenix;
-//
-//    requires TrayTester;
-//    requires commons.collections4;
+    requires TrayTester;
+    requires commons.collections4;
 
     opens application.gallery to javafx.fxml;
     exports application.gallery;
