@@ -1,6 +1,8 @@
 module application {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.jfoenix;
+
     requires TrayTester;
     requires commons.collections4;
 
