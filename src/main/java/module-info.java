@@ -2,11 +2,10 @@ module application{
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
+    requires com.jfoenix;
 
-//    requires com.jfoenix;
-//
-//    requires TrayTester;
-//    requires commons.collections4;
+    requires TrayTester;
+    requires org.apache.commons.collections4;
 
     opens application.gallery to javafx.fxml;
     exports application.gallery;
