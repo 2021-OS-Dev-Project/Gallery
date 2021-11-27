@@ -1,19 +1,20 @@
 package application.gallery;
 
 import application.model.Exhibitions;
+
+import com.jfoenix.controls.JFXDrawer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import com.jfoenix.controls.JFXDrawer;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
