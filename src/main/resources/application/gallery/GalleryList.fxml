@@ -23,7 +23,7 @@
                      <effect>
                         <ImageInput>
                            <source>
-                              <Image url="file:/C:/Users/choheejin/IdeaProjects/Gallery/src/main/resources/application/gallery/image/Menu/NavigationBar.png" />
+                              <Image url="file:///C:/Users/OhJiwoo/OpensourceJava/Gallery/src/main/resources/application/gallery/image/Menu/NavigationBar.png" />
                            </source>
                         </ImageInput>
                      </effect>

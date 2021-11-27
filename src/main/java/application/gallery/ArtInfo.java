@@ -45,21 +45,22 @@ public class ArtInfo {
 	int getArtNum() {
 		return ArtNum;
 	}
-	
+
 	String getArtName() {
 		return ArtName;
 	}
+
 	void setArtName(String Art) {
 		this.ArtName=ArtName;
 	}
+
 	void setArtist(String Artist) {
 		this.Artist=Artist;
 	}
 
-	String getArtsit(){
+	String getArtist(){
 		return Artist;
 	}
-
 
 	public String getStartPeriod() {
 		return StartPeriod;
@@ -83,6 +84,14 @@ public class ArtInfo {
 
 	public void setPrice(String price) {
 		Price = price;
+	}
+
+	public void setExhibitionNum(int num){
+		this.ExhibitionNum=num;
+	}
+
+	public int getExhibitionNum(){
+		return ExhibitionNum;
 	}
 	
 }

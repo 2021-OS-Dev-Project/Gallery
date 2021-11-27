@@ -54,7 +54,7 @@
                               <effect>
                                  <ImageInput x="1.0">
                                     <source>
-                                       <Image url="file:/C:/Users/choheejin/IdeaProjects/Gallery/src/main/resources/application/gallery/image/Sign.png" />
+                                       <Image url="file:///C:/Users/OhJiwoo/OpensourceJava/Gallery/src/main/resources/application/gallery/image/Sign.png" />
                                     </source>
                                  </ImageInput>
                               </effect></Button>
