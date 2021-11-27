@@ -18,6 +18,7 @@ public class App extends Application {
         Font.loadFont(getClass().getResourceAsStream("MapoPeacefull.ttf"), 10);
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("HomeDefault.fxml"));
+
         Scene scene = new Scene(fxmlLoader.load(), 1100, 700);
         stage.setTitle("한눈의 갤러리");
         stage.setScene(scene);

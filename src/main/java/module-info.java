@@ -2,8 +2,12 @@ module application{
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
     requires com.jfoenix;
+
+<<<<<<< HEAD
+    requires com.jfoenix;
+=======
+>>>>>>> UiDesign/#31-myPage
     requires TrayTester;
     requires org.apache.commons.collections4;
 
