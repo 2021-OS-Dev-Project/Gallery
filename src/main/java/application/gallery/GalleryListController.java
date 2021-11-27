@@ -1,20 +1,23 @@
 package application.gallery;
 
 import application.model.Exhibitions;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import com.jfoenix.controls.JFXDrawer;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-<<<<<<< HEAD
+
 import javafx.scene.control.Button;
-=======
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
->>>>>>> 934710c (전시회 선택 화면 초기 설정)
+
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -24,9 +27,9 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import com.jfoenix.controls.JFXDrawer;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -102,15 +105,10 @@ public class GalleryListController implements Initializable {
 
                 VBox vBox = fxmlLoader.load();
                 EachGalleryController eachGalleryController = fxmlLoader.getController();
-<<<<<<< HEAD
                 eachGalleryController.setData(exhibitions);
                 if(galleryList != null)
                     galleryList.getChildren().add(vBox);
-=======
-                eachGalleryController.setData(exhibitions, );
 
-                galleryList.getChildren().add(vBox);
->>>>>>> 934710c (전시회 선택 화면 초기 설정)
 
             }
 
