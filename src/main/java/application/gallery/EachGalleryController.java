@@ -24,17 +24,8 @@ public class EachGalleryController {
     @FXML
     private Label Explanation;
 
-    private MyListener myListener;
-    private Exhibitions exhibitions;
 
-    private void click(MouseEvent mouseEvent, Exhibitions exhibitions){
-        MyListener.onClickListener(exhibitions);
-    }
-
-    public void setData(Exhibitions exhibitions, MyListener myListener){
-        this.myListener = myListener;
-        this.exhibitions = exhibitions;
-
+    public void setData(Exhibitions exhibitions){
         try {
             FileInputStream fis=new FileInputStream(exhibitions.getCover());
             BufferedInputStream bis=new BufferedInputStream(fis); //스트림준비

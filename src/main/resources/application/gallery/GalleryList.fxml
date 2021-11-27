@@ -12,104 +12,71 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<<<<<<< HEAD
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.GalleryListController">
-=======
-<StackPane fx:id="sp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.GalleryListController">
->>>>>>> 934710c (전시회 선택 화면 초기 설정)
-   <children>
-      <AnchorPane prefHeight="700.0" prefWidth="1100.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="384.0">
-               <children>
-<<<<<<< HEAD
-                  <Button fx:id="barbutton" mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
-=======
-                  <HBox prefHeight="36.0" prefWidth="1080.0">
-                     <children>
-                        <Label fx:id="LocationSet" style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" />
-                        <Label style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" text="전시회 목록" />
-                     </children>
-                     <VBox.margin>
-                        <Insets left="8.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <ScrollPane fx:id="List" pickOnBounds="false" prefHeight="449.0" prefWidth="1058.0" style="-fx-background-color: transparent;" stylesheets="@CSS/ScreenStyle.css">
-                     <content>
-                        <HBox fx:id="galleryList" prefHeight="430.0" prefWidth="1058.0" spacing="20.0" style="-fx-background-color: white;" stylesheets="@CSS/ScreenStyle.css" />
-                     </content>
-                     <VBox.margin>
-                        <Insets right="15.0" />
-                     </VBox.margin></ScrollPane>
-               </children>
-               <BorderPane.margin>
-                  <Insets left="20.0" />
-               </BorderPane.margin>
-            </VBox>
-         </center>
-         <top>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
->>>>>>> d03bf32 (:lipstick: 팝업 화면 토대 완성 (#20))
-                     <effect>
-                        <ImageInput>
-                           <source>
-                              <Image url="file:/C:/Users/choheejin/IdeaProjects/Gallery/src/main/resources/application/gallery/image/Menu/NavigationBar.png" />
-                           </source>
-                        </ImageInput>
-                     </effect>
-                     <HBox.margin>
-                        <Insets left="20.0" top="31.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Label fx:id="MenuName" alignment="BOTTOM_LEFT" prefHeight="75.0" prefWidth="298.0" stylesheets="@CSS/LabelStyle.css" text="한눈의 갤러리">
-                     <effect>
-                        <Reflection fraction="0.3" />
-                     </effect>
-                     <HBox.margin>
-                        <Insets left="15.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <BorderPane layoutY="100.0" prefHeight="489.0" prefWidth="1100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0">
-               <top>
-                  <HBox BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="LocationSet" style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
+    <children>
+        <AnchorPane prefHeight="700.0" prefWidth="1100.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="384.0">
+                    <children>
+                        <Button fx:id="barbutton" mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
+                            <effect>
+                                <ImageInput>
+                                    <source>
+                                        <Image url="file:/C:/Users/choheejin/IdeaProjects/Gallery/src/main/resources/application/gallery/image/Menu/NavigationBar.png" />
+                                    </source>
+                                </ImageInput>
+                            </effect>
+                            <HBox.margin>
+                                <Insets left="20.0" top="31.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Label fx:id="MenuName" alignment="BOTTOM_LEFT" prefHeight="75.0" prefWidth="298.0" stylesheets="@CSS/LabelStyle.css" text="한눈의 갤러리">
+                            <effect>
+                                <Reflection fraction="0.3" />
+                            </effect>
+                            <HBox.margin>
+                                <Insets left="15.0" />
+                            </HBox.margin>
                         </Label>
-                        <Label style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" text="전시회 목록">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" />
-                     </BorderPane.margin>
-                  </HBox>
-               </top>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-               <left>
-                  <ScrollPane fx:id="List" pannable="true" pickOnBounds="false" prefHeight="430.0" prefWidth="1058.0" style="-fx-background-color: transparent;" stylesheets="@CSS/ScreenStyle.css" BorderPane.alignment="CENTER">
-                     <content>
-                        <HBox fx:id="galleryList" prefHeight="430.0" prefWidth="1058.0" spacing="20.0" style="-fx-background-color: white;" stylesheets="@CSS/ScreenStyle.css" />
-                     </content>
-                     <BorderPane.margin>
-                        <Insets right="20.0" />
-                     </BorderPane.margin>
-                  </ScrollPane>
-               </left>
-            </BorderPane>
-            <JFXDrawer fx:id="bar" defaultDrawerSize="270.0" miniDrawerSize="-10.0" prefHeight="600.0" prefWidth="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0" />
-         </children>
-      </AnchorPane>
-   </children>
+                    </children>
+                </HBox>
+                <BorderPane layoutY="100.0" prefHeight="489.0" prefWidth="1100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0">
+                    <top>
+                        <HBox BorderPane.alignment="CENTER">
+                            <children>
+                                <Label fx:id="LocationSet" style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css">
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Label>
+                                <Label style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" text="전시회 목록">
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <BorderPane.margin>
+                                <Insets bottom="10.0" />
+                            </BorderPane.margin>
+                        </HBox>
+                    </top>
+                    <padding>
+                        <Insets left="20.0" />
+                    </padding>
+                    <left>
+                        <ScrollPane fx:id="List" pannable="true" pickOnBounds="false" prefHeight="430.0" prefWidth="1058.0" style="-fx-background-color: transparent;" stylesheets="@CSS/ScreenStyle.css" BorderPane.alignment="CENTER">
+                            <content>
+                                <HBox fx:id="galleryList" prefHeight="430.0" prefWidth="1058.0" spacing="20.0" style="-fx-background-color: white;" stylesheets="@CSS/ScreenStyle.css" />
+                            </content>
+                            <BorderPane.margin>
+                                <Insets right="20.0" />
+                            </BorderPane.margin>
+                        </ScrollPane>
+                    </left>
+                </BorderPane>
+                <JFXDrawer fx:id="bar" defaultDrawerSize="270.0" miniDrawerSize="-10.0" prefHeight="600.0" prefWidth="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0" />
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>
