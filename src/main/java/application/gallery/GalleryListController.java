@@ -2,15 +2,30 @@ package application.gallery;
 
 import application.model.Exhibitions;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 import com.jfoenix.controls.JFXDrawer;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+
 import javafx.scene.control.Button;
+
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,6 +56,18 @@ public class GalleryListController implements Initializable {
     private String location;
 
     List<Exhibitions> exhibitionsList;
+
+    @FXML
+    private VBox POP;
+
+    @FXML
+    private StackPane sp;
+
+    private StackPane newLoadedPane;
+    private StackPane newLoadedPane2;
+
+    private MyListener myListener;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,12 +109,41 @@ public class GalleryListController implements Initializable {
                 if(galleryList != null)
                     galleryList.getChildren().add(vBox);
 
+
             }
+
+            galleryList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if(event.getClickCount()>=1) {
+                        try {
+                            Parent login = FXMLLoader.load(getClass().getResource("Select.fxml"));
+                            Scene scene = new Scene(login);
+                            Stage primaryStage =(Stage) ((Node)event.getSource()).getScene().getWindow();
+                            primaryStage.setScene(scene);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
         } catch (IOException e){
             e.printStackTrace();
         }
+
     }
 
+    public void Move2Select(Exhibitions exhibitions) {
+        String name = exhibitions.getName();
+        try {
+            Parent login =FXMLLoader.load(getClass().getResource("Select.fxml"));
+            Scene scene = new Scene(login);
+            Stage primaryStage =(Stage) galleryList.getScene().getWindow();
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     class ExcelIO {
 
@@ -170,6 +226,10 @@ public class GalleryListController implements Initializable {
                 exhibitions.setName(tmp.getArtName());
                 System.out.println(tmp.PrintArt());
                 ls.add(exhibitions);
+
+                myListener = new MyListener(){
+                    Move2Select(exhibitions);
+                };
             }
             return ls;
 

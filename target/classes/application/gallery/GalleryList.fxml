@@ -12,14 +12,47 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
+<<<<<<< HEAD
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.GalleryListController">
+=======
+<StackPane fx:id="sp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.GalleryListController">
+>>>>>>> 934710c (전시회 선택 화면 초기 설정)
    <children>
       <AnchorPane prefHeight="700.0" prefWidth="1100.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="384.0">
                <children>
+<<<<<<< HEAD
                   <Button fx:id="barbutton" mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
+=======
+                  <HBox prefHeight="36.0" prefWidth="1080.0">
+                     <children>
+                        <Label fx:id="LocationSet" style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" />
+                        <Label style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" stylesheets="@CSS/LabelStyle.css" text="전시회 목록" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="8.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ScrollPane fx:id="List" pickOnBounds="false" prefHeight="449.0" prefWidth="1058.0" style="-fx-background-color: transparent;" stylesheets="@CSS/ScreenStyle.css">
+                     <content>
+                        <HBox fx:id="galleryList" prefHeight="430.0" prefWidth="1058.0" spacing="20.0" style="-fx-background-color: white;" stylesheets="@CSS/ScreenStyle.css" />
+                     </content>
+                     <VBox.margin>
+                        <Insets right="15.0" />
+                     </VBox.margin></ScrollPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets left="20.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+         <top>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
+>>>>>>> d03bf32 (:lipstick: 팝업 화면 토대 완성 (#20))
                      <effect>
                         <ImageInput>
                            <source>
