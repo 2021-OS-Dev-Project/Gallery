@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER_LEFT" prefHeight="233.0" prefWidth="840.0" spacing="20.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-border-color: gray; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.EachGalleryController">
+   <children>
+      <ImageView fx:id="GalleryImg" fitHeight="229.0" fitWidth="308.0" pickOnBounds="true" smooth="false" HBox.hgrow="NEVER">
+         <HBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </HBox.margin></ImageView>
+      <VBox alignment="CENTER_LEFT" prefHeight="212.0" prefWidth="591.0">
+         <children>
+            <Label fx:id="GalleryName" style="-fx-font-family: MapoPeacefull; -fx-font-size: 17;" textFill="#6800a4">
+               <VBox.margin>
+                  <Insets bottom="8.0" />
+               </VBox.margin></Label>
+            <Label fx:id="Explanation" alignment="TOP_LEFT" lineSpacing="3.0" style="-fx-font-family: MapoPeacefull;" text="전시회 제목 + '\n'&#10;전시회 내용" wrapText="true" />
+         </children>
+      </VBox>
+   </children>
+</HBox>
