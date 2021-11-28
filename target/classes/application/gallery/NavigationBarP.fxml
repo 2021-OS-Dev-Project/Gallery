@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="st" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="285.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.NavigationPController">
+   <children>
+      <JFXButton id="MenuHome" fx:id="Home" alignment="BASELINE_LEFT" maxWidth="307.0" onAction="#Move2Home" prefHeight="60.0" prefWidth="307.0" ripplerFill="#e7c2ff" stylesheets="@CSS/LabelStyle.css" text="   홈 화면">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/Menu/MenuHome.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXButton>
+      <JFXButton id="MenuSign" fx:id="Mypage" alignment="BASELINE_LEFT" maxWidth="307.0" onAction="#Move2Mypage" prefHeight="60.0" prefWidth="307.0" ripplerFill="#e7c2ff" stylesheets="@CSS/LabelStyle.css" text="   마이페이지">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/Menu/MenuSign.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXButton>
+      <JFXButton id="MenuExhibition" fx:id="Exhibition" alignment="BASELINE_LEFT" maxWidth="307.0" onAction="#Move2Exhibition" prefHeight="60.0" prefWidth="307.0" ripplerFill="#e8c4ff" stylesheets="@CSS/LabelStyle.css" text="   전시회 찾기">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/Menu/MenuExhibition.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXButton>
+      <JFXButton id="MenuBoard" fx:id="Board" alignment="BASELINE_LEFT" maxWidth="307.0" onAction="#Move2Board" prefHeight="60.0" prefWidth="285.0" ripplerFill="#e8c4ff" stylesheets="@CSS/LabelStyle.css" text="   게시판">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image/Menu/MenuBoard.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXButton>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</VBox>

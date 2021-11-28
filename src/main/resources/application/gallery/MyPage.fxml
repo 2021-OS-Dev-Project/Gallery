@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.MypageController">
+   <children>
+      <AnchorPane>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="384.0">
+               <children>
+                  <Button fx:id="barbutton" mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
+                     <effect>
+                        <ImageInput>
+                           <source>
+                              <Image url="@image/Menu/NavigationBar.png" />
+                           </source>
+                        </ImageInput>
+                     </effect>
+                     <HBox.margin>
+                        <Insets left="20.0" top="31.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Label fx:id="MenuName" alignment="BOTTOM_LEFT" prefHeight="75.0" prefWidth="298.0" stylesheets="@CSS/LabelStyle.css" text="한눈의 갤러리">
+                     <effect>
+                        <Reflection fraction="0.3" />
+                     </effect>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <BorderPane prefHeight="600.0" prefWidth="1100.0" AnchorPane.topAnchor="100.0">
+               <center>
+                  <HBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="600.0" prefWidth="1145.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="35.0" left="30.0" right="20.0" />
+                           </padding>
+                           <children>
+                              <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="260.0" spacing="20.0" style="-fx-background-color: rgba(231, 194, 255, 0.56);">
+                                 <children>
+                                    <ImageView fitHeight="44.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@image/people.png" />
+                                       </image></ImageView>
+                                    <Label fx:id="Explanation" alignment="TOP_LEFT" lineSpacing="3.0" style="-fx-font-family: MapoPeacefull;" text="username + '\n'&#10;email" textFill="#a4a4a4" wrapText="true">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin></Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="30.0" right="700.0" top="15.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="20.0" left="25.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <Label style="-fx-font-family: MapoPeacefull; -fx-font-weight: Bold; -fx-font-size: 16px;" text="구독 미술관">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin></Label>
+                              <ScrollPane fx:id="sList" pannable="true" pickOnBounds="false" prefHeight="385.0" prefWidth="1058.0" style="-fx-background-color: white;">
+                                 <content>
+                                    <HBox fx:id="subscribeList" prefHeight="0.0" prefWidth="0.0" spacing="20.0" style="-fx-background-color: white;" />
+                                 </content>
+                                 <VBox.margin>
+                                    <Insets bottom="30.0" />
+                                 </VBox.margin>
+                              </ScrollPane>
+                              <Label style="-fx-font-family: MapoPeacefull; -fx-font-weight: Bold; -fx-font-size: 16px;" text="작성 후기">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin></Label>
+                              <ScrollPane fx:id="rList" pannable="true" pickOnBounds="false" prefHeight="300.0" prefWidth="1058.0" style="-fx-background-color: white;">
+                                 <content>
+                                    <HBox fx:id="reviewList" prefHeight="0.0" prefWidth="0.0" spacing="20.0" style="-fx-background-color: white;" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+      <JFXDrawer fx:id="bar" defaultDrawerSize="270.0" layoutX="10.0" layoutY="10.0" miniDrawerSize="-10.0" prefHeight="600.0" prefWidth="1.0" AnchorPane.topAnchor="100.0" />
+   </children>
+</AnchorPane>

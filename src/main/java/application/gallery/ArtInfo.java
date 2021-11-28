@@ -9,9 +9,10 @@ public class ArtInfo {
 	private String Time;
 	private String Price;
 	private String Explanation;
+	private String SRC;
 	private int ExhibitionNum;
 
-	ArtInfo(int ArtNum,String ArtName,String ArtistName,String StartPeriod,String EndPeriod,String Time,String Price,int exhibitionNum){
+	ArtInfo(int ArtNum,String ArtName,String ArtistName,String StartPeriod,String EndPeriod,String Time,String Price,String SRC,int exhibitionNum){
 		this.ArtNum=ArtNum;
 		this.ArtName=ArtName;
 		this.Artist=ArtistName;
@@ -19,31 +20,22 @@ public class ArtInfo {
 		this.EndPeriod=EndPeriod;
 		this.Time=Time;
 		this.Price=Price;
+		this.SRC=SRC;
 		this.ExhibitionNum=exhibitionNum;
 	}
-	ArtInfo(int ArtNum,String ArtName,String ArtistName,String StartPeriod,String EndPeriod,String Time,String Price){
-		this.ArtNum=ArtNum;
-		this.ArtName=ArtName;
-		this.Artist=ArtistName;
-		this.StartPeriod=StartPeriod;
-		this.EndPeriod=EndPeriod;
-		this.Time=Time;
-		this.Price=Price;
-	}
 	
-	String PrintArt() {
-		return "��ǰ : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price;
+	StringBuilder PrintArt() {
+		StringBuilder msg=new StringBuilder();
+		msg.append("Artist : "+Artist+"\nPeriod : "+StartPeriod+" ~ "+EndPeriod+"\nTime : "+ Time+"\nPrice : "+Price+" ");;
+		return msg;
 	}
-	/*String PrintArt() {
-		
-		for(ExhibitionInfo tmp:Object.exhibition)
-			if(tmp.getNum()==ExhibitionNum)
-				return "��ǰ : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price+" "+ tmp.PrintExh();
-		return "��ǰ : "+ArtName+" "+Artist+" "+StartPeriod+" ~ "+EndPeriod+" "+ Time+" "+Price;
-	}*/
 
 	int getArtNum() {
 		return ArtNum;
+	}
+
+	String getSrc() {
+		return SRC;
 	}
 	
 	String getArtName() {
@@ -55,11 +47,9 @@ public class ArtInfo {
 	void setArtist(String Artist) {
 		this.Artist=Artist;
 	}
-
-	String getArtsit(){
+	String getArtist() {
 		return Artist;
 	}
-
 
 	public String getStartPeriod() {
 		return StartPeriod;
@@ -85,5 +75,9 @@ public class ArtInfo {
 		Price = price;
 	}
 	
+	public int getExhibitionNum() {
+		return ExhibitionNum;
+	}
+
 }
 

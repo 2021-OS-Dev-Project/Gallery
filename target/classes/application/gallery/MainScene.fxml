@@ -13,7 +13,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="Main" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.mainController">
+<Pane fx:id="Main" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.MainController">
     <HBox prefHeight="700.0" prefWidth="1100.0">
         <children>
             <Pane prefHeight="490.0" prefWidth="400.0">
@@ -31,7 +31,7 @@
                     </Label>
                     <Label fx:id="BodyLabel" prefHeight="93.0" prefWidth="649.0" stylesheets="@CSS/LabelStyle.css" text="이 프로그램은 전국구 단위로 전시회를 모아서 &#10;보여줍니다. 구독 및 내 위치 검색 기능이 지원되며, &#10;모든 기능을 무료로 사용 가능합니다.">
                     </Label>
-                    <Button fx:id="StartButton" onAction="#Move2SignUp" prefHeight="43.0" prefWidth="159.0" stylesheets="@CSS/ButtonStyle.css" text="GET STARTED &gt;">
+                    <Button fx:id="StartButton" prefHeight="43.0" prefWidth="159.0" stylesheets="@CSS/ButtonStyle.css" text="GET STARTED &gt;">
                         <cursor>
                             <Cursor fx:constant="HAND" />
                         </cursor>
@@ -47,14 +47,14 @@
                         <children>
                             <Pane prefHeight="193.0" prefWidth="213.0">
                                 <children>
-                           <Button fx:id="LoginNsign" ellipsisString="" layoutX="152.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#Move2Login" prefHeight="50.0" prefWidth="47.0" text="로그인/회원가입" textOverrun="LEADING_WORD_ELLIPSIS">
+                           <Button fx:id="LoginNsign" ellipsisString="" layoutX="152.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="47.0" text="로그인/회원가입" textOverrun="LEADING_WORD_ELLIPSIS">
                               <cursor>
                                  <Cursor fx:constant="HAND" />
                               </cursor>
                               <effect>
                                  <ImageInput x="1.0">
                                     <source>
-                                       <Image url="file:/C:/Users/choheejin/IdeaProjects/Gallery/src/main/resources/application/gallery/image/Sign.png" />
+                                        <Image url="@image/Sign.png" />
                                     </source>
                                  </ImageInput>
                               </effect></Button>

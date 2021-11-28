@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.loginController">
+<StackPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.LoginController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
@@ -50,7 +50,7 @@
                                         <Insets left="25.0" top="12.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button fx:id="MenuHome" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="255.0" stylesheets="@CSS/ButtonStyle.css" text="홈 화면" />
+                                <Button fx:id="MenuHome" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#Move2Home" prefHeight="50.0" prefWidth="255.0" stylesheets="@CSS/ButtonStyle.css" text="홈 화면" />
                             </children>
                             <opaqueInsets>
                                 <Insets />
@@ -98,7 +98,7 @@
                                         <Insets left="25.0" top="12.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button fx:id="MenuExhibition" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="261.0" stylesheets="@CSS/ButtonStyle.css" text="전시회 찾기" />
+                                <Button fx:id="MenuExhibition" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#Move2Exhibition" prefHeight="50.0" prefWidth="261.0" stylesheets="@CSS/ButtonStyle.css" text="전시회 찾기" />
                             </children>
                             <cursor>
                                 <Cursor fx:constant="HAND" />
@@ -114,7 +114,7 @@
                                         <Insets left="25.0" top="12.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button fx:id="MenuBoard" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="258.0" stylesheets="@CSS/ButtonStyle.css" text="게시판" />
+                                <Button fx:id="MenuBoard" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#Move2Board" prefHeight="50.0" prefWidth="258.0" stylesheets="@CSS/ButtonStyle.css" text="게시판" />
                             </children>
                             <cursor>
                                 <Cursor fx:constant="HAND" />

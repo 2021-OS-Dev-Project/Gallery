@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gallery.SelectController">
+   <children>
+      <AnchorPane prefHeight="700.0" prefWidth="1100.0">
+         <children>
+            <BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@CSS/ScreenStyle.css">
+               <top>
+                  <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="barButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="51.0">
+                           <effect>
+                              <ImageInput>
+                                 <source>
+                                    <Image url="@image/Menu/NavigationBar.png" />
+                                 </source>
+                              </ImageInput>
+                           </effect>
+                           <HBox.margin>
+                              <Insets left="20.0" top="31.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label fx:id="MenuName" alignment="BOTTOM_LEFT" prefHeight="75.0" prefWidth="298.0" stylesheets="@CSS/LabelStyle.css" text="한눈의 갤러리">
+                           <effect>
+                              <Reflection fraction="0.3" />
+                           </effect>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </top>
+               <center>
+                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox prefHeight="279.0" prefWidth="1100.0">
+                           <children>
+                              <ImageView fx:id="artImage" fitHeight="270.0" fitWidth="290.0" pickOnBounds="true" smooth="false">
+                                 <HBox.margin>
+                                    <Insets right="15.0" top="4.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="306.0" prefWidth="735.0">
+                                 <children>
+                                    <Label fx:id="exhibitionName" text="전시 제목" />
+                                    <Label fx:id="museumName" text="미술관 명">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="message" alignment="TOP_LEFT" prefHeight="145.0" prefWidth="735.0" text="상세 설명" wrapText="true">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="131.0" style="-fx-background-color: #6200EE; -fx-background-radius: 4px;">
+                                       <children>
+                                          <ImageView pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@image/add.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="8.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <Label fx:id="subscribe" onMouseClicked="#SubscribeHandler" style="-fx-text-fill: white;" text="SUBSCIRBE">
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                       <effect>
+                                          <DropShadow color="#00000049" offsetX="3.0" offsetY="4.0" spread="0.2" />
+                                       </effect>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <Label style="-fx-font-family: MapoPeacefull; -fx-font-size: 20;" text="관람 후기">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ScrollPane fx:id="List" pickOnBounds="false" prefHeight="231.0" prefWidth="980.0" style="-fx-background-color: transparent;">
+                           <content>
+                              <HBox fx:id="galleryList" prefHeight="0.0" prefWidth="0.0" spacing="20.0" style="-fx-background-color: white;" stylesheets="@CSS/ScreenStyle.css" />
+                           </content>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </ScrollPane>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets left="20.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+      <JFXDrawer fx:id="bar" defaultDrawerSize="270.0" layoutX="20.0" layoutY="20.0" miniDrawerSize="-10.0" prefHeight="600.0" prefWidth="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0" />
+   </children>
+</AnchorPane>
