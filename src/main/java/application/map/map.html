@@ -2,204 +2,148 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>장소검색하기</title>
+    <title>마커 클러스터러에 클릭이벤트 추가하기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <style>
 .area {
     position: absolute;
     background: #fff;
     border: 1px solid #888;
     border-radius: 3px;
-    font-size: 12px;
+    font-size: 20px;
     top: -5px;
     left: 15px;
     padding:2px;
 }
 
 .info {
+
     font-size: 12px;
     padding: 5px;
 }
 .info .title {
     font-weight: bold;
 }
+.map_wrap {position:relative;width:100%;height:350px;}
+.title {font-weight:bold;display:block;}
+.hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+#centerAddr {display:block;margin-top:2px;font-weight: normal;}
+.bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
 </style>
 </head>
 <body>
-<div id="map" style="width:50%;height:500px;"></div>
-<div id="clickLatlng"></div>
-<p id="result"></p>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=542bed3a08f1e37bf973dc252dad22a3&libraries=services,clusterer,drawing"></script>
-
-<script>
-// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
+<div class="map_wrap">
+    <div id="map" style="width:50%;height:500px;"></div>
+    <div class="hAddr">
+        <span class="title">현재 위치</span>
+        <span id="centerAddr"></span>
+    </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?
+appkey=542bed3a08f1e37bf973dc252dad22a3&libraries=services,clusterer,drawing"></script><script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(36.96373183830195, 127.11318981769719), // 지도의 중심좌표
-        level: 13 // 지도의 확대 레벨
-
+        level: 13, // 지도의 확대 레벨
+        center: new kakao.maps.LatLng(36.36859219509007,127.91104210158865) // 지도의 중심좌표
     };
-// 지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption),
     customOverlay = new kakao.maps.CustomOverlay({}),
     infowindow = new kakao.maps.InfoWindow({removable: true});
-// 장소 검색 객체를 생성합니다
-var ps = new kakao.maps.services.Places();
 
-// 키워드로 장소를 검색합니다
-//ps.keywordSearch('충북대학교', placesSearchCB);
+var geocoder = new kakao.maps.services.Geocoder();
 
-// 키워드 검색 완료 시 호출되는 콜백함수 입니다
-function placesSearchCB (data, status, pagination) {
+// 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+
+// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+kakao.maps.event.addListener(map, 'idle', function() {
+    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+});
+
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+}
+
+
+// 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
+function displayCenterInfo(result, status) {
     if (status === kakao.maps.services.Status.OK) {
+        var infoDiv = document.getElementById('centerAddr');
 
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        var bounds = new kakao.maps.LatLngBounds();
-
-        for (var i=0; i<data.length; i++) {
-            displayMarker(data[i]);
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        for(var i = 0; i < result.length; i++) {
+            // 행정동의 region_type 값은 'H' 이므로
+            if (result[i].region_type === 'H') {
+                infoDiv.innerHTML = result[i].address_name;
+                break;
+            }
         }
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
     }
 }
+var level= map.getLevel();
+if (level===13){
+    setZoomable(false);
+    setDraggable(false);
+    }
 
-// 지도에 마커를 표시하는 함수입니다
-function displayMarker(place) {
+var clusterer = new kakao.maps.MarkerClusterer({
+    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+    minLevel: 6 // 클러스터 할 최소 지도 레벨
+});
 
-    // 마커를 생성하고 지도에 표시합니다
-    //var marker = new kakao.maps.Marker({
-        //map: map,
-        //position: new kakao.maps.LatLng(place.y, place.x)
-    //}); //필요없을거같음
+// 데이터를 가져오기 위해 jQuery를 사용합니다
+// 데이터를 가져와 마커를 생성하고 클러스터러 객체에 넘겨줍니다
+$.get("./js/Exhibitions.json", function (data) {
+    // 데이터에서 좌표 값을 가지고 마커를 표시합니다
+    // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
+    var markers = $(data.positions).map(function (i, position) {
+        var maks = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(position.x, position.y)
+        });
 
-    // 마커에 클릭이벤트를 등록합니다
-    kakao.maps.event.addListener(marker, 'click', function() {
-        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-        infowindow.open(map, marker);
+        var infowindow = new kakao.maps.InfoWindow({
+            content: position.name,
+            removable: true
+        });
+
+
+        kakao.maps.event.addListener(maks, 'click', makeOverListener(map, maks, infowindow));
+
+        return maks;
+
     });
-}
 
-// 지도가 이동, 확대, 축소로 인해 중심좌표가 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
-kakao.maps.event.addListener(map, 'center_changed', function() {
-
-    // 지도의  레벨을 얻어옵니다
-    var level = map.getLevel();
-
-    // 지도의 중심좌표를 얻어옵니다
-    var latlng = map.getCenter();
-
-    var message = '<p>지도 레벨은 ' + level + ' 이고</p>';
-    message += '<p>중심 좌표는 위도 ' + latlng.getLat() + ', 경도 ' + latlng.getLng() + '입니다</p>';
-
-    var resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = message;
-    if (level===13){
-        setZoomable(false);
-        }
-    else if(level!=13){
-        setZoomable(true);
-        }
+    // 클러스터러에 마커들을 추가합니다
+    clusterer.addMarkers(markers);
 
 });
-//
 
-var markerPosition  = new kakao.maps.LatLng(35.33834071603831, 129.3662266573699);
-var marker = new kakao.maps.Marker({
-    position: markerPosition
-}); //좌표 위치 알기용
-marker.setMap(map);
+// 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+function makeOverListener(map, marker, infowindow) {
+    infowindow.close();
+    return function () {
+        infowindow.open(map, marker);
+    };
+}
+
+// 인포윈도우를 닫는 클로저를 만드는 함수입니다
+function makeOutListener(infowindow) {
+    return function () {
+        infowindow.close();
+    };
+}
+
 function setZoomable(zoomable) {
     // 마우스 휠로 지도 확대,축소 가능여부를 설정합니다
     map.setZoomable(zoomable);
 }
-
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new kakao.maps.services.Geocoder();
-
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('충청북도 청주시 청원구 내수읍 내수로 241', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면
-     if (status === kakao.maps.services.Status.OK) {
-
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        //var infowindow = new kakao.maps.InfoWindow({
-        //    content: '<div style="width:150px;text-align:center;padding:6px 0;">쉐마미술관</div>'
-        //});
-        infowindow.open(map, marker);
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-    }
-});
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new kakao.maps.services.Geocoder();
-
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('충청북도 청주시 상당구 문의면 대청호반로 721', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면
-     if (status === kakao.maps.services.Status.OK) {
-
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        //var infowindow = new kakao.maps.InfoWindow({
-        //    content: '<div style="width:150px;text-align:center;padding:6px 0;">청주시립대청호미술관</div>'
-        //});
-        infowindow.open(map, marker);
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-    }
-});
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new kakao.maps.services.Geocoder();
-
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('충청북도 청주시 흥덕구 사직2동 충렬로18번길 50', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면
-     if (status === kakao.maps.services.Status.OK) {
-
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        //var infowindow = new kakao.maps.InfoWindow({
-        //    content: '<div style="width:150px;text-align:center;padding:6px 0;">청주시립미술관</div>'
-        //});
-        infowindow.open(map, marker);
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-    }
-});
+function setDraggable(draggable) {
+    // 마우스 드래그로 지도 이동 가능여부를 설정합니다
+    map.setDraggable(draggable);
+}
 
 var areas = [
     {
@@ -219,17 +163,33 @@ var areas = [
     {
         name : '경상남도',
         path : [
-        new kakao.maps.LatLng(35.64912105954252, 129.4497208003335),
-        new kakao.maps.LatLng(35.6511871814545, 129.2554886038317),
-        new kakao.maps.LatLng(35.72221888841761, 129.15565609726568),
-        new kakao.maps.LatLng(35.647908824466086, 129.05191557580156),
-        new kakao.maps.LatLng(35.56949292006062, 128.75909270457618),
-        new kakao.maps.LatLng(35.578728039072494, 128.5926821010706),
-        new kakao.maps.LatLng(35.67651251414598, 128.52393716985875),
-        new kakao.maps.LatLng(35.61152001901417, 128.36449225709595),
-        new kakao.maps.LatLng(35.6597610498084, 128.16459819436028),
-        new kakao.maps.LatLng(35.79650152984172, 128.0986262953342),
-        new kakao.maps.LatLng(35.91366407161159, 127.8790315059559),
+        new kakao.maps.LatLng(35.40682890712567, 129.22171371276664),
+        new kakao.maps.LatLng(35.417411161883344, 129.21073233403123),
+        new kakao.maps.LatLng(35.421049809781, 129.20096832877095),
+        new kakao.maps.LatLng(35.43839369333601, 129.1986217623588),
+        new kakao.maps.LatLng(35.43093484453331, 129.1645970217016),
+        new kakao.maps.LatLng(35.44399357356293, 129.1438045189848),
+        new kakao.maps.LatLng(35.46278856535912, 129.1245659099282),
+        new kakao.maps.LatLng(35.500100854736466, 129.10157033375557),
+        new kakao.maps.LatLng(35.5159627454368, 129.05119632528744),
+        new kakao.maps.LatLng(35.530878747669654, 129.05580915108993),
+        new kakao.maps.LatLng(35.523427838547626, 129.01893547387664),
+        new kakao.maps.LatLng(35.527285826962576, 128.99504543897922),
+        new kakao.maps.LatLng(35.54594281447525, 128.9828057940558),
+        new kakao.maps.LatLng(35.56226965023718, 128.9719151913472),
+        new kakao.maps.LatLng(35.5822517637503, 129.01899949438433),
+        new kakao.maps.LatLng(35.614439180502515, 129.02545840782375),
+        new kakao.maps.LatLng(35.619452227616094, 129.00157064593347), //울산 경남 경계
+        new kakao.maps.LatLng(35.57247608872348, 128.75968737740237), //진짜여기부터시작
+        new kakao.maps.LatLng(35.68058746975174, 128.52949313601528), //여기까지 경남하고겹침
+        new kakao.maps.LatLng(35.64049147254814, 128.50753214061996),
+        new kakao.maps.LatLng(35.64118563180328, 128.45102064134156),
+        new kakao.maps.LatLng(35.618473566444756, 128.4209430232764),
+        new kakao.maps.LatLng(35.61319935064047, 128.3784706223959), //경남경북대구꼭짓점
+        new kakao.maps.LatLng(35.61565878161284, 128.36509231712196),
+        new kakao.maps.LatLng(35.66274756735775, 128.16517164822497),
+        new kakao.maps.LatLng(35.80065466413276, 128.09779848054532),
+        new kakao.maps.LatLng(35.91891718931861, 127.88529397990129),
         new kakao.maps.LatLng(35.75430914973239, 127.64924764620903),
         new kakao.maps.LatLng(35.542285820931696, 127.60236630660141),
         new kakao.maps.LatLng(35.447238415123714, 127.68624751408747),
@@ -240,8 +200,6 @@ var areas = [
         new kakao.maps.LatLng(34.70475603176031, 128.6104933224245),
         new kakao.maps.LatLng(34.88496534102118, 128.7596004357234),
         new kakao.maps.LatLng(35.03834652544177, 128.68153307400868),
-        new kakao.maps.LatLng(34.90745458226964, 128.45479612658994),
-        new kakao.maps.LatLng(35.05956745448312, 128.648296950287),//
         new kakao.maps.LatLng(35.080184575660304, 128.81991466061083),
         new kakao.maps.LatLng(35.12714616578389, 128.84202037663792),
         new kakao.maps.LatLng(35.15673328810159, 128.79212178782458),
@@ -298,13 +256,86 @@ var areas = [
         new kakao.maps.LatLng(35.91891718931861, 127.88529397990129),
         new kakao.maps.LatLng(35.80065466413276, 128.09779848054532),
         new kakao.maps.LatLng(35.66274756735775, 128.16517164822497),
-        new kakao.maps.LatLng(35.61565878161284, 128.36509231712196),
-        new kakao.maps.LatLng(35.67832585722772, 128.52591557237403),
-        new kakao.maps.LatLng(35.58403726892527, 128.59190469796542),
+        new kakao.maps.LatLng(35.61565878161284, 128.36509231712196), //
+        new kakao.maps.LatLng(35.61319935064047, 128.3784706223959), //경남경북대구꼭짓점
+        new kakao.maps.LatLng(35.618473566444756, 128.4209430232764),
+        new kakao.maps.LatLng(35.64118563180328, 128.45102064134156),
+        new kakao.maps.LatLng(35.64049147254814, 128.50753214061996),
+        new kakao.maps.LatLng(35.68058746975174, 128.52949313601528), //여기까지 경남하고겹침
+        new kakao.maps.LatLng(35.71289574841704, 128.52869596299698),
+        new kakao.maps.LatLng(35.73667704867125, 128.56310534401572),
+        new kakao.maps.LatLng(35.73950205228708, 128.6112647016051),
+        new kakao.maps.LatLng(35.7001802540366, 128.6189577752988),
+        new kakao.maps.LatLng(35.7215510554096, 128.65899606140263),
+        new kakao.maps.LatLng(35.72801693684952, 128.69166605795584),
+        new kakao.maps.LatLng(35.75791840000217, 128.69795946328986),
+        new kakao.maps.LatLng(35.79271099938976, 128.68454204986912),
+        new kakao.maps.LatLng(35.80493449901738, 128.71736731610457),
+        new kakao.maps.LatLng(35.82753093094612, 128.71006416515624),
+        new kakao.maps.LatLng(35.83997185902013, 128.72733019242372),
+        new kakao.maps.LatLng(35.85789552023778, 128.72417680547622),
+        new kakao.maps.LatLng(35.8781578196227, 128.7586300659672),
+        new kakao.maps.LatLng(35.91855622033992, 128.75668822203752),
+        new kakao.maps.LatLng(35.92693696625286, 128.7356017376219),
+        new kakao.maps.LatLng(35.968282273580215, 128.74785739066098),
+        new kakao.maps.LatLng(35.9997024652789, 128.7286786330726),
+        new kakao.maps.LatLng(36.00587849388236, 128.6166684738881),
+        new kakao.maps.LatLng(35.98408361744645, 128.60770858170503),
+        new kakao.maps.LatLng(35.97095623652175, 128.55352215949745),
+        new kakao.maps.LatLng(35.980437127903336, 128.53384019529207),
+        new kakao.maps.LatLng(35.97477980597132, 128.5252165290247),
+        new kakao.maps.LatLng(35.95731925789123, 128.53764914821966),
+        new kakao.maps.LatLng(35.92055333876279, 128.5263015724502),
+        new kakao.maps.LatLng(35.909281000645905, 128.50552600982545),
+        new kakao.maps.LatLng(35.890847569326304, 128.50375935605487),
+        new kakao.maps.LatLng(35.88838989347462, 128.4927273101722),
+        new kakao.maps.LatLng(35.89708295039702, 128.48934641263787),
+        new kakao.maps.LatLng(35.894340020516815, 128.4779542119888),
+        new kakao.maps.LatLng(35.897353434265455, 128.46737780568552),
+        new kakao.maps.LatLng(35.90952277522139, 128.46263994745553),
+        new kakao.maps.LatLng(35.93416069547254, 128.4758586055456),
+        new kakao.maps.LatLng(35.94006571821148, 128.46462103632754),
+        new kakao.maps.LatLng(35.934616882382144, 128.43828144043962),
+        new kakao.maps.LatLng(35.890109303182236, 128.3977848299017),
+        new kakao.maps.LatLng(35.857981979271834, 128.38305079161233),
+        new kakao.maps.LatLng(35.84681781133862, 128.4494449844674),
+        new kakao.maps.LatLng(35.82449163513303, 128.48303153603172),
+        new kakao.maps.LatLng(35.81409511943716, 128.48425431487294),
+        new kakao.maps.LatLng(35.80680897776946, 128.41898042934446),
+        new kakao.maps.LatLng(35.75303349303395, 128.38123223135062),
+        new kakao.maps.LatLng(35.72704905360602, 128.43312525986812),
+        new kakao.maps.LatLng(35.70737595736103, 128.4384301380882),
+        new kakao.maps.LatLng(35.69938733276314, 128.43121587175304),
+        new kakao.maps.LatLng(35.69606146748381, 128.41984369072648),
+        new kakao.maps.LatLng(35.707190963662626, 128.35498341315565),
+        new kakao.maps.LatLng(35.69452042305355, 128.35335494008186),
+        new kakao.maps.LatLng(35.679479563794054, 128.35734231874454), //경남복사
+        new kakao.maps.LatLng(35.646668700401484, 128.40201037656217),
+        new kakao.maps.LatLng(35.62080133856193, 128.39449479186953),
+        new kakao.maps.LatLng(35.61515693423872, 128.38380174597435),
+        new kakao.maps.LatLng(35.61319935064047, 128.3784706223959), //경남경북대구꼭짓점
+        new kakao.maps.LatLng(35.618473566444756, 128.4209430232764),
+        new kakao.maps.LatLng(35.64118563180328, 128.45102064134156),
+        new kakao.maps.LatLng(35.64049147254814, 128.50753214061996),
+        new kakao.maps.LatLng(35.68058746975174, 128.52949313601528), //여기까지 경남하고겹침
         new kakao.maps.LatLng(35.57247608872348, 128.75968737740237),
-        new kakao.maps.LatLng(35.652067120467606, 129.05113873594797),
-        new kakao.maps.LatLng(35.72527545434019, 129.15202560285155),
-        new kakao.maps.LatLng(35.65419366361914, 129.25468995668683)
+        new kakao.maps.LatLng(35.619452227616094, 129.00157064593347), //울산 경남 경계
+        new kakao.maps.LatLng(35.635325317087556, 129.035169130545),
+        new kakao.maps.LatLng(35.63810914851833, 129.07480142906908),
+        new kakao.maps.LatLng(35.649491663082664, 129.08357451051822),
+        new kakao.maps.LatLng(35.657950956814396, 129.0611821145934),
+        new kakao.maps.LatLng(35.68893347970383, 129.07046206518874),
+        new kakao.maps.LatLng(35.71664336475128, 129.1348220281223),
+        new kakao.maps.LatLng(35.72807113537316, 129.14078498800862),
+        new kakao.maps.LatLng(35.717367295559825, 129.15888429474597),
+        new kakao.maps.LatLng(35.722362615361384, 129.20145020182778),
+        new kakao.maps.LatLng(35.701691355234956, 129.258855074908),
+        new kakao.maps.LatLng(35.66021912824532, 129.25627265969337),
+        new kakao.maps.LatLng(35.646683525213454, 129.30110787306467),
+        new kakao.maps.LatLng(35.658874553272, 129.32689544049134),
+        new kakao.maps.LatLng(35.680253429871584, 129.35437421321424),
+        new kakao.maps.LatLng(35.65942672397242, 129.4159428360739),
+        new kakao.maps.LatLng(35.651826032686756, 129.44962680914477) //경북 울산 경계
         ]
     },
     {
@@ -404,8 +435,19 @@ var areas = [
         new kakao.maps.LatLng(37.84797085198979, 126.69277468291685),
         new kakao.maps.LatLng(37.794835624252876, 126.66102280982385),
         new kakao.maps.LatLng(37.77612215545053, 126.57974553355996),
-        new kakao.maps.LatLng(37.78971511915858, 126.51572913087628),
-        new kakao.maps.LatLng(37.70669674079924, 126.51917291645225),
+        new kakao.maps.LatLng(37.78971511915858, 126.51572913087628),//
+        new kakao.maps.LatLng( 37.81508520893245, 126.46555971597982),
+        new kakao.maps.LatLng( 37.81508520893245, 126.46555971597982),
+        new kakao.maps.LatLng( 37.81159315069579, 126.34493698296276),
+        new kakao.maps.LatLng( 37.821876989747246, 126.23363173616957),
+        new kakao.maps.LatLng( 37.750101906870285, 126.19225386118),
+        new kakao.maps.LatLng( 37.69418925079269, 126.11449205489922),
+        new kakao.maps.LatLng( 37.64968927615947, 126.18028900820109),
+        new kakao.maps.LatLng( 37.621423686753516, 126.26614144790025),
+        new kakao.maps.LatLng( 37.6277381076164, 126.36032897800527),
+        new kakao.maps.LatLng( 37.59554161441302, 126.37799717510624),
+        new kakao.maps.LatLng( 37.587760402279166, 126.43603093007457),
+        new kakao.maps.LatLng( 37.58689461871242, 126.49980279180159),
         new kakao.maps.LatLng(37.603032654690814, 126.55173056102876),
         new kakao.maps.LatLng(37.60882205609979, 126.55785679628669),
         new kakao.maps.LatLng(37.6007869962291, 126.56805075967141),
@@ -1390,7 +1432,6 @@ var areas = [
     {
         name : '부산광역시',
         path : [
-        new kakao.maps.LatLng(35.05956745448312, 128.648296950287),//
         new kakao.maps.LatLng(35.080184575660304, 128.81991466061083),
         new kakao.maps.LatLng(35.12714616578389, 128.84202037663792),
         new kakao.maps.LatLng(35.15673328810159, 128.79212178782458),
@@ -1507,6 +1548,67 @@ var areas = [
         new kakao.maps.LatLng(35.417411161883344, 129.21073233403123),
         new kakao.maps.LatLng(35.40682890712567, 129.22171371276664)
         ]
+    },
+    {
+        name : '대구광역시',
+        path : [
+        new kakao.maps.LatLng(35.61319935064047, 128.3784706223959), //경남경북대구꼭짓점
+        new kakao.maps.LatLng(35.618473566444756, 128.4209430232764),
+        new kakao.maps.LatLng(35.64118563180328, 128.45102064134156),
+        new kakao.maps.LatLng(35.64049147254814, 128.50753214061996),
+        new kakao.maps.LatLng(35.68058746975174, 128.52949313601528), //여기까지 경남하고겹침
+        new kakao.maps.LatLng(35.71289574841704, 128.52869596299698),
+        new kakao.maps.LatLng(35.73667704867125, 128.56310534401572),
+        new kakao.maps.LatLng(35.73950205228708, 128.6112647016051),
+        new kakao.maps.LatLng(35.7001802540366, 128.6189577752988),
+        new kakao.maps.LatLng(35.7215510554096, 128.65899606140263),
+        new kakao.maps.LatLng(35.72801693684952, 128.69166605795584),
+        new kakao.maps.LatLng(35.75791840000217, 128.69795946328986),
+        new kakao.maps.LatLng(35.79271099938976, 128.68454204986912),
+        new kakao.maps.LatLng(35.80493449901738, 128.71736731610457),
+        new kakao.maps.LatLng(35.82753093094612, 128.71006416515624),
+        new kakao.maps.LatLng(35.83997185902013, 128.72733019242372),
+        new kakao.maps.LatLng(35.85789552023778, 128.72417680547622),
+        new kakao.maps.LatLng(35.8781578196227, 128.7586300659672),
+        new kakao.maps.LatLng(35.91855622033992, 128.75668822203752),
+        new kakao.maps.LatLng(35.92693696625286, 128.7356017376219),
+        new kakao.maps.LatLng(35.968282273580215, 128.74785739066098),
+        new kakao.maps.LatLng(35.9997024652789, 128.7286786330726),
+        new kakao.maps.LatLng(36.00587849388236, 128.6166684738881),
+        new kakao.maps.LatLng(35.98408361744645, 128.60770858170503),
+        new kakao.maps.LatLng(35.97095623652175, 128.55352215949745),
+        new kakao.maps.LatLng(35.980437127903336, 128.53384019529207),
+        new kakao.maps.LatLng(35.97477980597132, 128.5252165290247),
+        new kakao.maps.LatLng(35.95731925789123, 128.53764914821966),
+        new kakao.maps.LatLng(35.92055333876279, 128.5263015724502),
+        new kakao.maps.LatLng(35.909281000645905, 128.50552600982545),
+        new kakao.maps.LatLng(35.890847569326304, 128.50375935605487),
+        new kakao.maps.LatLng(35.88838989347462, 128.4927273101722),
+        new kakao.maps.LatLng(35.89708295039702, 128.48934641263787),
+        new kakao.maps.LatLng(35.894340020516815, 128.4779542119888),
+        new kakao.maps.LatLng(35.897353434265455, 128.46737780568552),
+        new kakao.maps.LatLng(35.90952277522139, 128.46263994745553),
+        new kakao.maps.LatLng(35.93416069547254, 128.4758586055456),
+        new kakao.maps.LatLng(35.94006571821148, 128.46462103632754),
+        new kakao.maps.LatLng(35.934616882382144, 128.43828144043962),
+        new kakao.maps.LatLng(35.890109303182236, 128.3977848299017),
+        new kakao.maps.LatLng(35.857981979271834, 128.38305079161233),
+        new kakao.maps.LatLng(35.84681781133862, 128.4494449844674),
+        new kakao.maps.LatLng(35.82449163513303, 128.48303153603172),
+        new kakao.maps.LatLng(35.81409511943716, 128.48425431487294),
+        new kakao.maps.LatLng(35.80680897776946, 128.41898042934446),
+        new kakao.maps.LatLng(35.75303349303395, 128.38123223135062),
+        new kakao.maps.LatLng(35.72704905360602, 128.43312525986812),
+        new kakao.maps.LatLng(35.70737595736103, 128.4384301380882),
+        new kakao.maps.LatLng(35.69938733276314, 128.43121587175304),
+        new kakao.maps.LatLng(35.69606146748381, 128.41984369072648),
+        new kakao.maps.LatLng(35.707190963662626, 128.35498341315565),
+        new kakao.maps.LatLng(35.69452042305355, 128.35335494008186),
+        new kakao.maps.LatLng(35.679479563794054, 128.35734231874454),
+        new kakao.maps.LatLng(35.646668700401484, 128.40201037656217),
+        new kakao.maps.LatLng(35.62080133856193, 128.39449479186953),
+        new kakao.maps.LatLng(35.61515693423872, 128.38380174597435)
+        ]
     }
 ];
 
@@ -1547,9 +1649,9 @@ function displayArea(area) {
         polygon[0].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[0], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[0], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(34.96231409414864, 127.00105113320748))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1558,6 +1660,19 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[0].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+
     });
 
     kakao.maps.event.addListener(polygon[1], 'mouseover', function(mouseEvent) {
@@ -1576,9 +1691,9 @@ function displayArea(area) {
         polygon[1].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[1], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[1], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.488436860486615, 128.2902981993853))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1587,6 +1702,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[1].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[2], 'mouseover', function(mouseEvent) {
@@ -1605,9 +1732,9 @@ function displayArea(area) {
         polygon[2].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[2], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[2], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(36.45340832895909, 128.70889281375122))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1616,6 +1743,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[2].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[3], 'mouseover', function(mouseEvent) {
@@ -1634,9 +1773,9 @@ function displayArea(area) {
         polygon[3].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[3], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[3], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(37.70583284987426, 128.2878521112045))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1645,6 +1784,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[3].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[4], 'mouseover', function(mouseEvent) {
@@ -1663,9 +1814,9 @@ function displayArea(area) {
         polygon[4].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[4], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[4], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(37.3704679923037, 127.49312328144687))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1674,6 +1825,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[4].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[5], 'mouseover', function(mouseEvent) {
@@ -1692,9 +1855,9 @@ function displayArea(area) {
         polygon[5].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[5], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[5], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(36.84099128162146, 127.73365390965155))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1703,6 +1866,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[5].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[6], 'mouseover', function(mouseEvent) {
@@ -1721,9 +1896,9 @@ function displayArea(area) {
         polygon[6].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[6], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[6], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(36.5456280846557, 126.90457738111162))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1732,6 +1907,18 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[6].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
     kakao.maps.event.addListener(polygon[7], 'mouseover', function(mouseEvent) {
@@ -1750,9 +1937,9 @@ function displayArea(area) {
         polygon[7].setOptions({fillColor: '#fff'});
         customOverlay.setMap(null);
     });
-    kakao.maps.event.addListener(polygon[7], 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(polygon[7], 'mousedown', function(mouseEvent) {
         var level = map.getLevel();
-        map.setLevel(11, {animate:true, anchor: new kakao.maps.LatLng(34.84001202904125, 127.00944618502422)});
+        map.setLevel(11, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.7196642687058, 127.11776962809058))});
         polygon[0].setMap(null);
         polygon[1].setMap(null);
         polygon[2].setMap(null);
@@ -1761,35 +1948,348 @@ function displayArea(area) {
         polygon[5].setMap(null);
         polygon[6].setMap(null);
         polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[7].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
     });
 
+    kakao.maps.event.addListener(polygon[8], 'mouseover', function(mouseEvent) {
+        polygon[8].setOptions({fillColor: '#09f'});
 
+        customOverlay.setContent('<div class="area">' + area[8].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[8], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[8], 'mouseout', function() {
+        polygon[8].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[8], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(37.56986180742543, 126.98732214147421))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[8].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[9], 'mouseover', function(mouseEvent) {
+        polygon[9].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[9].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[9], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[9], 'mouseout', function() {
+        polygon[9].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[9], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(37.45602394997319, 126.70584571309253))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[9].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[10], 'mouseover', function(mouseEvent) {
+        polygon[10].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[10].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[10], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[10], 'mouseout', function() {
+        polygon[10].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[10], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(36.35037561364978, 127.38516825368444))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[10].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[11], 'mouseover', function(mouseEvent) {
+        polygon[11].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[11].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[11], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[11], 'mouseout', function() {
+        polygon[11].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[11], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(36.47379740581289, 127.29028784042606))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[11].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[12], 'mouseover', function(mouseEvent) {
+        polygon[12].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[12].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[12], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[12], 'mouseout', function() {
+        polygon[12].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[12], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.16990371361751, 126.85492722469749))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[12].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[13], 'mouseover', function(mouseEvent) {
+        polygon[13].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[13].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[13], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[13], 'mouseout', function() {
+        polygon[13].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[13], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.181029272664475, 129.07646171520665))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[13].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[14], 'mouseover', function(mouseEvent) {
+        polygon[14].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[14].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[14], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[14], 'mouseout', function() {
+        polygon[14].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[14], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.540624165839716, 129.31359532134016))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[14].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    kakao.maps.event.addListener(polygon[15], 'mouseover', function(mouseEvent) {
+        polygon[15].setOptions({fillColor: '#09f'});
+
+        customOverlay.setContent('<div class="area">' + area[15].name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+    kakao.maps.event.addListener(polygon[15], 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+    kakao.maps.event.addListener(polygon[15], 'mouseout', function() {
+        polygon[15].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+    kakao.maps.event.addListener(polygon[15], 'mousedown', function(mouseEvent) {
+        var level = map.getLevel();
+        map.setLevel(8, {animate:true, anchor: map.setCenter(new kakao.maps.LatLng(35.87396839506283, 128.60477174381705))});
+        polygon[0].setMap(null);
+        polygon[1].setMap(null);
+        polygon[2].setMap(null);
+        polygon[3].setMap(null);
+        polygon[4].setMap(null);
+        polygon[5].setMap(null);
+        polygon[6].setMap(null);
+        polygon[7].setMap(null);
+        polygon[8].setMap(null);
+        polygon[9].setMap(null);
+        polygon[10].setMap(null);
+        polygon[11].setMap(null);
+        polygon[12].setMap(null);
+        polygon[13].setMap(null);
+        polygon[14].setMap(null);
+        polygon[15].setMap(null);
+        setZoomable(true);
+        setDraggable(true);
+        polygon[15].setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
 }
-
-var marker = new kakao.maps.Marker({
-    // 지도 중심좌표에 마커를 생성합니다
-    position: map.getCenter()
-});
-// 지도에 마커를 표시합니다
-marker.setMap(map);
-
-// 지도에 클릭 이벤트를 등록합니다 <8도 좌표 찾기위함
-// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-
-    // 클릭한 위도, 경도 정보를 가져옵니다
-    var latlng = mouseEvent.latLng;
-
-    // 마커 위치를 클릭한 위치로 옮깁니다
-    marker.setPosition(latlng);
-
-    var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-    message += '경도는 ' + latlng.getLng() + ' 입니다';
-
-    var resultDiv = document.getElementById('clickLatlng');
-    resultDiv.innerHTML = message;
-    return latlng;
-});
 
 
 </script>
